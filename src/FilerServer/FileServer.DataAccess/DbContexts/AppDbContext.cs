@@ -10,6 +10,6 @@ public class AppDbContext : DbContext
 	{
 
 	}
+	public virtual DbSet<File> Files { get; set; } = default!;
 	public virtual DbSet<User> Users { get; set; } = default!;
-	public virtual DbSet<Domain.Entities.File> Files { get; set; } = default!;
 }
