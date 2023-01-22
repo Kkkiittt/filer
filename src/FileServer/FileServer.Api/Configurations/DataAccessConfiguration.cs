@@ -1,4 +1,6 @@
 ﻿using FileServer.DataAccess.DbContexts;
+using FileServer.DataAccess.Interfaces;
+using FileServer.DataAccess.Repositories;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -13,5 +15,8 @@ public static class DataAccessConfiguration
 	{
 		string connectionString = builder.Configuration.GetConnectionString("ElephantSQL")!;
 		builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+		builder.Services.AddScoped<IFileRepository, FileRepository>();
+		builder.Services.AddScoped<IUserRepository, UserRepository>();
+		builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 	}
 }
