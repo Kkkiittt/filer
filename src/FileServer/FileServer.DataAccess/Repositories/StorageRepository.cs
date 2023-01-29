@@ -10,9 +10,11 @@ namespace FileServer.DataAccess.Repositories;
 public class StorageRepository : IStorageRepository
 {
 	private readonly string _storagePath;
+	private readonly int _capacity;
+
 	public StorageRepository(IWebHostEnvironment environment)
 	{
-		_storagePath = environment.ContentRootPath;
+		_storagePath = environment.WebRootPath;
 	}
 	public async Task<bool> AddAsync(string name, byte[] value)
 	{
@@ -23,17 +25,38 @@ public class StorageRepository : IStorageRepository
 		return true;
 	}
 
-	public bool CreateAsync(string name)
+	public bool Create(string name)
 	{
 		string path = Path.Combine(_storagePath, name);
 		File.Create(path);
 		return true;
 	}
 
-	public bool DeleteAsync(string name)
+	public bool Delete(string name)
 	{
 		string path = Path.Combine(_storagePath, name);
 		File.Delete(path);
 		return true;
+	}
+
+	public async Task<int> DivideFileAsync(string name)
+	{
+		string path = Path.Combine(_storagePath, name);
+		Directory.CreateDirectory(path);
+		byte[] buffer = new byte[_capacity];
+		FileStream file = File.OpenRead(path);
+		int parts;
+		for(parts = 1; await file.ReadAsync(buffer, 0, _capacity) > 0; parts++)
+		{
+			string partPath = Path.Combine(path, parts.ToString() + ".txt");
+			await File.WriteAllBytesAsync(partPath, buffer);
+		}
+		return parts;
+	}
+
+	public async Task<byte[]> GetPartAsync(string name, int part)
+	{
+		string path = Path.Combine(_storagePath, name, part + ".txt");
+		return await File.ReadAllBytesAsync(path);
 	}
 }
