@@ -2,5 +2,5 @@
 
 public interface IIdentityService
 {
-	public string Id{ get; }
+	public long? Id { get; }
 }

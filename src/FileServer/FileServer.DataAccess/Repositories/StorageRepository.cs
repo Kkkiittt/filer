@@ -46,11 +46,16 @@ public class StorageRepository : IStorageRepository
 		byte[] buffer = new byte[_capacity];
 		FileStream file = File.OpenRead(path);
 		int parts;
-		for(parts = 1; await file.ReadAsync(buffer, 0, _capacity) > 0; parts++)
+		string partPath;
+		for(parts = 1; await file.ReadAsync(buffer, 0, _capacity) > _capacity; parts++)
 		{
-			string partPath = Path.Combine(path, parts.ToString() + ".txt");
+			partPath = Path.Combine(path, parts.ToString() + ".txt");
 			await File.WriteAllBytesAsync(partPath, buffer);
 		}
+		byte[] last = new byte[file.Length - file.Position];
+		partPath = Path.Combine(path, parts.ToString() + ".txt");
+		await file.ReadAsync(last, 0, last.Length);
+		await File.WriteAllBytesAsync(partPath, last);
 		return parts;
 	}
 
