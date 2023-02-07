@@ -14,10 +14,9 @@ public class SecurityService : ISecurityService
 	{
 		_engine = SHA256.Create();
 	}
-	public (string hash, string salt) Hash(string s)
+	public string Hash(string s, string salt)
 	{
-		string salt = Guid.NewGuid().ToString();
-		return (ComputeHash(s, salt), salt);
+		return ComputeHash(s, salt);
 	}
 
 	private string ComputeHash(string s, string salt)

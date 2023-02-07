@@ -2,6 +2,6 @@
 
 public interface ISecurityService
 {
-	public (string hash, string salt) Hash(string s);
+	public string Hash(string s, string salt);
 	public bool Verify(string hash, string pasw, string salt);
 }

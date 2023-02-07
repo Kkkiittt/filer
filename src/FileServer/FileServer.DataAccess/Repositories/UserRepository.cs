@@ -15,7 +15,7 @@ public class UserRepository : BaseRepository, IUserRepository
 
 	}
 
-	public async Task<bool> AddAsync(User entity)
+	public async Task<bool> UpdateAsync(User entity)
 	{
 		_dbContext.Users.Add(entity);
 		return await _dbContext.SaveChangesAsync() > 0;
