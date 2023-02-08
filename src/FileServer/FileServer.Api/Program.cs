@@ -11,7 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddMemoryCache();
+
 builder.ConfigureDataAccess();
+builder.ConfigureAuth();
+builder.ConfireServices();
+builder.Services.ConfigureSwaggerAuthorize();
 
 var app = builder.Build();
 

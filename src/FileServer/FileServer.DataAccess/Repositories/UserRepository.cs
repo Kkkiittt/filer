@@ -38,9 +38,4 @@ public class UserRepository : BaseRepository, IUserRepository
 		return await _dbContext.Users.FirstOrDefaultAsync(user => user.Email == email);
 	}
 
-	public async Task<bool> UpdateAsync(User entity)
-	{
-		_dbContext.Users.Update(entity);
-		return await _dbContext.SaveChangesAsync() > 0;
-	}
 }
